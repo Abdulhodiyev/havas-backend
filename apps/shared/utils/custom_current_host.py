@@ -1,4 +1,3 @@
-
 """
 Django request utilities for extracting host and client IP information.
 """

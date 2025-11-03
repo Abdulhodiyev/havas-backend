@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 
 from apps.shared.exceptions.custom_exceptions import CustomException

@@ -1,4 +1,3 @@
-
 from django.urls import path
 
 from apps.users.views.device import DeviceRegisterCreateAPIView, DeviceListApiView

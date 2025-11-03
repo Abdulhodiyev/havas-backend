@@ -1,4 +1,3 @@
-
 import uuid
 
 from django.core.validators import validate_ipv46_address

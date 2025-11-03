@@ -1,4 +1,3 @@
-
 """
 Custom exception class for raising every single kind of exception
 on the project

@@ -1,4 +1,3 @@
-
 from rest_framework.permissions import BasePermission
 
 from apps.shared.exceptions.custom_exceptions import CustomException
