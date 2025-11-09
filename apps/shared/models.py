@@ -1,10 +1,12 @@
+
 import uuid
 
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+User = get_user_model()
 
 class Language(models.TextChoices):
     RU = "RU", "Russian"
@@ -55,7 +57,7 @@ class Media(BaseModel):
 
     # Metadata
     uploaded_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        User, on_delete=models.SET_NULL,
         null=True, blank=True,
     )
     is_public = models.BooleanField(default=False)

@@ -1,6 +1,8 @@
+
 import logging
 from typing import Dict
 
+from .accounts import ACCOUNT_MESSAGES
 from .shared import SHARED_MESSAGES
 from .types import MessageTemplate
 
@@ -9,6 +11,7 @@ logger = logging.getLogger(__name__)
 # Combine all message dictionaries
 MESSAGES: Dict[str, MessageTemplate] = {
     **SHARED_MESSAGES,
+    **ACCOUNT_MESSAGES
 }
 
 
@@ -18,6 +21,7 @@ def _validate_messages():
     all_keys = []
     message_sources = [
         ("SHARED_MESSAGES", SHARED_MESSAGES),
+        ("ACCOUNT_MESSAGES", ACCOUNT_MESSAGES),
     ]
 
     duplicates = []
@@ -41,4 +45,5 @@ __all__ = [
     'MESSAGES',
     'MessageTemplate',
     'SHARED_MESSAGES',
+    'ACCOUNT_MESSAGES'
 ]

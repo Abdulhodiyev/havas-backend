@@ -1,3 +1,4 @@
+
 from typing import Dict
 
 from .types import MessageTemplate
@@ -120,14 +121,4 @@ SHARED_MESSAGES: Dict[str, MessageTemplate] = {
         },
         "status_code": 500
     },
-    "TOKEN_IS_NOT_PROVIDED": {
-        "id": "TOKEN_IS_NOT_PROVIDED",
-        "messages": {
-            "en": "Token is required",
-            "uz": "Token berilmadi",
-            "ru": "Ruscha bilmayman",
-        },
-        "status_code": 400
-    },
-
 }

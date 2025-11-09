@@ -1,9 +1,10 @@
-from modeltranslation.decorators import register
-from modeltranslation.translator import TranslationOptions
 
-from apps.products.models import Product
+from modeltranslation.translator import translator, TranslationOptions
+from .models import Product, Measurement, ProductCategory
 
 
-@register(Product)
 class ProductTranslationOptions(TranslationOptions):
-    fields = ('title', 'description',)
+    fields = ('title', 'description')
+
+
+translator.register(Product, ProductTranslationOptions)

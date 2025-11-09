@@ -1,5 +1,7 @@
+
 import uuid
 
+from django.contrib.auth import get_user_model
 from django.core.validators import validate_ipv46_address
 from django.db import models, transaction
 from django.utils import timezone
@@ -7,8 +9,8 @@ from django.utils import timezone
 from apps.shared.exceptions.custom_exceptions import CustomException
 from apps.shared.models import BaseModel, Language
 from apps.users.managers.device import DeviceManager
-from apps.users.models.user import User
 
+User = get_user_model()
 
 class DeviceTheme(models.TextChoices):
     DARK = "DARK", "Dark"
@@ -197,7 +199,7 @@ class Device(BaseModel):
         self.refresh_token_jti = new_refresh_token_jti
         self.is_active = True
         self.logged_out_at = None
-        self.save(update_fields=['refresh_token_jti', 'is_active', 'logged_out_at', 'last_login'])
+        self.save(update_fields=['is_active', 'logged_out_at', 'last_login'])
 
     def update_firebase_token(self, token):
         """Update firebase token for push notifications"""

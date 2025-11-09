@@ -1,11 +1,12 @@
+
 from django.urls import path
 
-from apps.products.views.product_detail import ProductDetailRetrieveUpdateDestroyAPIView
-from apps.products.views.product_list_create import ProductListCreateApiView
+from apps.products import views
 
 app_name = 'products'
 
 urlpatterns = [
-    path('', ProductListCreateApiView.as_view(), name='list-create'),
-    path('<int:pk>/', ProductDetailRetrieveUpdateDestroyAPIView.as_view(), name='detail'),
+    path('', views.ProductListAPIView.as_view(), name='list'),
+    path('<int:pk>/', views.ProductRetrieveAPIView.as_view(), name='retrieve'),
+    path('<int:pk>/rating/', views.ProductRatingCreateAPIView.as_view(), name='product-rating'),
 ]
