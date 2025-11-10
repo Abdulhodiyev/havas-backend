@@ -10,10 +10,10 @@ urlpatterns = [
     path('verify/', views.VerifyCodeAPIView.as_view(), name='verify_code'),
     path('logout/', views.LogoutAPIView.as_view(), name='logout'),
     path('login/', views.LoginAPIView.as_view(), name='login'),
-    path('forgot-password/', views.ForgotPasswordAPIView.as_view(), name='forgot_password'),
+    # path('forgot-password/', views.ForgotPasswordAPIView.as_view(), name='forgot_password'),
     path('profile/', views.ProfileRetrieveUpdateAPIView.as_view(), name='profile'),
-    path('set-password/', views.SetPasswordAPIView.as_view(), name='set-password'),
-    path('update-password/', views.UpdatePasswordAPIView.as_view(), name='update-password'),
+    # path('set-password/', views.SetPasswordAPIView.as_view(), name='set-password'),
+    # path('update-password/', views.UpdatePasswordAPIView.as_view(), name='update-password'),
 ]
 
 urlpatterns += [

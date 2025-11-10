@@ -9,8 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models.user import PhoneOTP
 from .models.device import Device
-from .serializers import VerifySerializer, RegisterSerializer, ProfileRetrieveUpdateSerializer, LoginSerializer, \
-    ForgotPasswordSerializer, SetPasswordSerializer, UpdatePasswordSerializer, DeviceRegisterSerializer
+from .serializers import VerifySerializer, RegisterSerializer, ProfileRetrieveUpdateSerializer, LoginSerializer, DeviceRegisterSerializer
 from .utils import generate_password, generate_6_digit_code, expiry_in_minutes, generate_username
 from django.contrib.auth import get_user_model, authenticate
 
@@ -173,44 +172,6 @@ class LoginAPIView(APIView):
         )
 
 
-class ForgotPasswordAPIView(APIView):
-    serializer_class = ForgotPasswordSerializer
-    permission_classes = (IsMobileUser,)
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        phone = serializer.validated_data['phone']
-        user_exists = User.objects.filter(phone=phone).exists()
-
-        if not user_exists:
-            return CustomResponse.error(message_key='USER_NOT_FOUND', context={'phone': phone})
-
-        PhoneOTP.objects.filter(phone=phone, used=False).delete()
-        code = generate_6_digit_code()
-        expires_at = expiry_in_minutes(EXPIRATION_MINUTES)
-        PhoneOTP.objects.create(
-            phone=phone,
-            code=code,
-            expires_at=expires_at
-        )
-
-        data = {
-            "phone": phone,
-            "code": code,
-            "expires_in_minutes": EXPIRATION_MINUTES,
-            "max_attempts": MAX_ATTEMPTS,
-        }
-
-        return CustomResponse.success(
-            request=request,
-            message_key="OTP_SENT",
-            data=data,
-            status_code=status.HTTP_200_OK
-        )
-
-
 class LogoutAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -232,65 +193,6 @@ class LogoutAPIView(APIView):
                 status_code=status.HTTP_400_BAD_REQUEST
             )
 
-
-class SetPasswordAPIView(UpdateAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = SetPasswordSerializer
-    queryset = User.objects.all()
-
-    def get_object(self):
-        return self.request.user
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def perform_update(self, serializer):
-        user = self.get_object()
-        new_password = serializer.validated_data.get('password')
-        user.set_password(new_password)
-        user.save()
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            instance._prefetched_objects_cache = {}
-
-        return CustomResponse.success(data=serializer.data, status_code=status.HTTP_200_OK)
-
-
-class UpdatePasswordAPIView(UpdateAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = UpdatePasswordSerializer
-    queryset = User.objects.all()
-
-    def get_object(self):
-        return self.request.user
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        password = serializer.validated_data['password']
-        password1 = serializer.validated_data['password1']
-        if not instance.check_password(password):
-            return CustomResponse.error(message_key="VALIDATION_ERROR", context={"phone": instance.phone}, status_code=status.HTTP_400_BAD_REQUEST)
-
-        instance.set_password(password1)
-        instance.save()
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            instance._prefetched_objects_cache = {}
-
-        return CustomResponse.success(data=serializer.data, status_code=status.HTTP_200_OK)
 
 
 class ProfileRetrieveUpdateAPIView(RetrieveUpdateAPIView):

@@ -2,7 +2,7 @@
 from django.db.models.aggregates import Avg
 from rest_framework import serializers
 
-from apps.products.models import Product, ProductRating
+from apps.products.models import Product
 from apps.shared.utils.translation_serializer_mixin import TranslatableSerializerMixin
 from apps.shared.mixins.translation_mixins import (
     TranslatedFieldsWriteMixin,
@@ -58,21 +58,3 @@ class ProductRetrieveSerializer(ProductTranslationMixin, TranslatedFieldsReadMix
 
     def get_in_stock(self, obj):
         return obj.in_stock()
-
-
-class ProductRatingCreateSerializer(serializers.ModelSerializer):
-    product = ProductRetrieveSerializer(read_only=True)
-
-    class Meta:
-        model = ProductRating
-        fields = "__all__"
-
-        extra_kwargs = {
-            'id': {'read_only': True},
-            'product': {'read_only': True},
-        }
-
-    def validate_rating(self, rating):
-        if not (0 <= rating <= 5):
-            raise serializers.ValidationError('Rating must be greater than 0')
-        return rating

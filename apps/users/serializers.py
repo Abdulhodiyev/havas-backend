@@ -77,53 +77,6 @@ class ProfileRetrieveUpdateSerializer(serializers.ModelSerializer):
         return birthday
 
 
-class ForgotPasswordSerializer(serializers.Serializer):
-    phone = serializers.CharField(max_length=14)
-
-    def validate_phone(self, phone):
-        if phone[0] != '+' or not phone[1:].isdigit() or not (10 < len(phone) < 15):
-            raise CustomException(message_key='VALIDATION_ERROR', context={'phone': phone})
-        return phone
-
-
-
-class SetPasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(max_length=128, write_only=True)
-    password_confirm = serializers.CharField(max_length=128, write_only=True)
-
-    def validate_password(self, password):
-        if len(password.strip()) < 8 or password.isdigit() or password.isalpha():
-            raise CustomException(message_key='VALIDATION_ERROR', context={'password': password})
-        return password
-
-    def validate(self, attrs):
-        password = attrs.get('password')
-        password_confirm = attrs.pop('password_confirm')
-        if password != password_confirm:
-            raise CustomException(message_key='VALIDATION_ERROR', context={'password': password})
-        return attrs
-
-
-class UpdatePasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(max_length=128, write_only=True)
-    password1 = serializers.CharField(max_length=128, write_only=True)
-    password2 = serializers.CharField(max_length=128, write_only=True)
-
-    def validate_password(self, password):
-        if len(password.strip()) < 8 or password.isdigit() or password.isalpha():
-            raise CustomException(message_key='VALIDATION_ERROR', context={'password': password})
-        return password
-
-    def validate(self, attrs):
-        password = attrs.get('password')
-        password1 = attrs.get('password1')
-        password2 = attrs.pop('password2')
-        if password1 != password2 or password == password1:
-            raise CustomException(message_key='VALIDATION_ERROR', context={'password': password1})
-        return attrs
-
-
-
 class DeviceRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
