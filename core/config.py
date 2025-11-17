@@ -24,13 +24,16 @@ SECRET_KEY = env('SECRET_KEY', default='unsafe-secret-key')
 DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
+MEDIA_ROOT = env('MEDIA_ROOT', default='/vol/web/media/')
+STATIC_ROOT = env('STATIC_ROOT', default='/vol/web/static/')
+
 # DATABASE SETTINGS
-DB_NAME = env('DB_NAME')
-DB_USER = env('DB_USER')
-DB_PASSWORD = env('DB_PASSWORD')
-DB_HOST = env('DB_HOST')
-DB_PORT = env('DB_PORT')
+DB_NAME = env('DB_NAME', default='havas')
+DB_USER = env('DB_USER', default='havas')
+DB_PASS = env('DB_PASS', default='havas')
+DB_HOST = env('DB_HOST', default='db')
+DB_PORT = env('DB_PORT', default=5432)
 
 # telegram bot
-TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
-TELEGRAM_CHANNEL_ID = env('TELEGRAM_CHANNEL_ID')
+TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='8255184425:AAELvYE4uR-EkBKPs2EVfng8POm28hSP3hs')
+TELEGRAM_CHANNEL_ID = env('TELEGRAM_CHANNEL_ID', default='id')
